@@ -3,6 +3,7 @@ package com.omarcosallan.dslist.services;
 import com.omarcosallan.dslist.dto.GameDTO;
 import com.omarcosallan.dslist.dto.GameMinDTO;
 import com.omarcosallan.dslist.entities.Game;
+import com.omarcosallan.dslist.projections.GameMinProjection;
 import com.omarcosallan.dslist.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,12 @@ public class GameService {
     @Transactional(readOnly = true)
     public List<GameMinDTO> findAll() {
         List<Game> result = gameRepository.findAll();
+        return result.stream().map(GameMinDTO::new).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<GameMinDTO> findByList(Long listId) {
+        List<GameMinProjection> result = gameRepository.searchByList(listId);
         return result.stream().map(GameMinDTO::new).collect(Collectors.toList());
     }
 }
